@@ -1,8 +1,18 @@
 window.CoffeeAssetPaths =
 
-  assets: <%= CoffeeAssetPaths.assets %>
+  assets: <%= 
+    assets = {}
+    ActionView::Helpers::AssetUrlHelper::ASSET_PUBLIC_DIRECTORIES.each do |type, path|
+      asset_dir = File.join(::Rails.root, 'app', 'assets', path)
+      next unless File.directory?(asset_dir)
 
-  assetTypes: <%= CoffeeAssetPaths.asset_types %>
+      Dir.chdir(asset_dir) do
+        assets[type] = Dir["**"].inject({}) {|h,f| h.merge! f => asset_path(f, :type => type)}
+      end
+    end
+    assets.to_json %>
+
+  assetTypes: <%= ActionView::Helpers::AssetUrlHelper::ASSET_PUBLIC_DIRECTORIES.keys.to_json %>
 
   assetPath: (type, name)->
     if @assets[type]?
