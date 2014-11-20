@@ -1,0 +1,14 @@
+window.CoffeeAssetPaths =
+
+  assets: <%= CoffeeAssetPaths.assets %>
+
+  assetTypes: <%= CoffeeAssetPaths.asset_types %>
+
+  assetPath: (type, name)->
+    if @assets[type]?
+      @assets[type][name]
+
+for assetType in CoffeeAssetPaths.assetTypes
+  do (assetType)->
+    window["#{assetType}_path"] = (name)->
+      CoffeeAssetPaths.assetPath(assetType, name)
