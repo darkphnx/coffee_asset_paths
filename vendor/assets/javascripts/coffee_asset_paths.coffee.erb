@@ -7,7 +7,7 @@ window.CoffeeAssetPaths =
       next unless File.directory?(asset_dir)
 
       Dir.chdir(asset_dir) do
-        assets[type] = Dir["**"].inject({}) {|h,f| h.merge! f => asset_path(f, :type => type)}
+        assets[type] = Dir["**"].sort.inject({}) {|h,f| h.merge! f => asset_path(f, :type => type)}
       end
     end
     assets.to_json %>
